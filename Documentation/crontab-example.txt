@@ -1,0 +1,60 @@
+# << PUT THESE COMMAND IN /etc/crontab FILE >>
+
+SHELL=/bin/sh
+PATH=/opt/AAA/fum-shaper:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+ 
+# m h dom mon dow user	command
+17 *	* * *	root    cd / && run-parts --report /etc/cron.hourly
+25 6	* * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
+52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
+
+# ┌────────── minute (0 - 59)
+# │ ┌──────── hour (0 - 23)
+# │ │ ┌────── day of month (1 - 31)
+# │ │ │ ┌──── month (1 - 12)
+# │ │ │ │ ┌── day of week (0 - 6 => Sunday - Saturday, or
+# │ │ │ │ │                1 - 7 => Monday - Sunday)
+# ↓ ↓ ↓ ↓ ↓
+# * * * * * command to be executed
+
+#
+#    :-) Sunday    |    0  ->  Sun
+#                  |  
+#        Monday    |    1  ->  Mon
+#       Tuesday    |    2  ->  Tue
+#     Wednesday    |    3  ->  Wed
+#      Thursday    |    4  ->  Thu
+#        Friday    |    5  ->  Fri
+#      Saturday    |    6  ->  Sat
+#                  |  
+#    :-) Sunday    |    7  ->  Sun
+#
+
+# 00:00 -- 07:59
+0 0 	   * * Sat,Sun,Mon,Tue,Wed,Thu,Fri root pgrep bw-control.py > /dev/null || bw-control.py restart --user-bandwidth-coefficient=2 > /dev/null 2>&1
+2-59   0   * * Sat,Sun,Mon,Tue,Wed,Thu,Fri root pgrep bw-control.py > /dev/null || bw-control.py start --user-bandwidth-coefficient=2 > /dev/null 2>&1
+*      1-7 * * Sat,Sun,Mon,Tue,Wed,Thu,Fri root pgrep bw-control.py > /dev/null || bw-control.py start --user-bandwidth-coefficient=2 > /dev/null 2>&1
+
+# 08:00 -- 9:59
+0 8 	   * * Sat,Sun,Mon,Tue,Wed root pgrep bw-control.py > /dev/null || bw-control.py restart --user-bandwidth-coefficient=1 > /dev/null 2>&1
+2-59 8   * *   Sat,Sun,Mon,Tue,Wed root pgrep bw-control.py > /dev/null || bw-control.py start --user-bandwidth-coefficient=1 > /dev/null 2>&1
+*      8-9 * * Sat,Sun,Mon,Tue,Wed root pgrep bw-control.py > /dev/null || bw-control.py start --user-bandwidth-coefficient=1 > /dev/null 2>&1
+
+# 10:00 -- 14:59
+0 10 	   * * Sat,Sun,Mon,Tue,Wed root pgrep bw-control.py > /dev/null || bw-control.py restart --user-bandwidth-coefficient=0.5 > /dev/null 2>&1
+2-59 10     * * Sat,Sun,Mon,Tue,Wed root pgrep bw-control.py > /dev/null || bw-control.py start --user-bandwidth-coefficient=0.5 > /dev/null 2>&1
+* 10-14  * * Sat,Sun,Mon,Tue,Wed root pgrep bw-control.py > /dev/null || bw-control.py start --user-bandwidth-coefficient=0.5 > /dev/null 2>&1
+ 
+
+# 15:00 -- 23:00
+0 15 	   * * Sat,Sun,Mon,Tue,Wed root pgrep bw-control.py > /dev/null || bw-control.py restart --user-bandwidth-coefficient=1 > /dev/null 2>&1
+2-59 15    * * Sat,Sun,Mon,Tue,Wed root pgrep bw-control.py > /dev/null || bw-control.py start --user-bandwidth-coefficient=1 > /dev/null 2>&1
+*    16-23 * * Sat,Sun,Mon,Tue,Wed root pgrep bw-control.py > /dev/null || bw-control.py start --user-bandwidth-coefficient=1 > /dev/null 2>&1
+
+# 08:00 -- 23:59
+0 8 	    * * Thu,Fri root pgrep bw-control.py > /dev/null || bw-control.py restart --user-bandwidth-coefficient=1 > /dev/null 2>&1
+2-59   8    * * Thu,Fri root pgrep bw-control.py > /dev/null || bw-control.py start --user-bandwidth-coefficient=1 > /dev/null 2>&1
+*      9-23 * * Thu,Fri root pgrep bw-control.py > /dev/null || bw-control.py start --user-bandwidth-coefficient=1 > /dev/null 2>&1
+
+*  *    * * *    root    /opt/AAA/fum-shaper/statistics.py user-count

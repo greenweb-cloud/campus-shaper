@@ -1,0 +1,13 @@
+Howto develop code?
+====================
+We have development and production server for this project:
+   aaa-dev ( 172.20.20.0 ) => development
+   	   this server has r/w pull/push to git repository.
+
+   tc-server (172.20.201.1) => production
+          this server just can pull from git server
+
+   git pull:  git clone git@git-ip:misc/AAA
+   git push:  git push origin master 
+
+

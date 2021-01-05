@@ -1,0 +1,22 @@
+Description of logging
+========================
+Refrence: https://docs.python.org/3/howto/logging-cookbook.html
+
+Format of log: '%(asctime)s %(name)-5s %(levelname)-8s %(message)s':
+       1. asctime: "2019/09/17 11:32" for example
+       2. name: 
+          A. LOGGED_IN : user in this line is logged in to the hotspot right now
+	  B. LOGGED_OUT: user in this line is logged out of the hotspot
+	  C. ONLINE_PROF: Count of online "proffesors" users.
+	  D. ONLINE_PHD: Count of online "phd students" users.
+	  E. ONLINE_MASTER: Count of online "master students" users.
+	  F. ONLINE_OTHER_STU: Count of other students like BS and ... . 
+	  G. ONLINE_STAFF: Count of online "staffs" users.
+	  H. ONLINE_DEFAULT: Count of online "default" users.
+       3. levelname:
+       	  (INFO, WARNING, ERROR, DEBUGE)
+       4. message: don't you know what message is? ;)
+       
+Q: What do you mean by online?
+A: 	Online user is the user who is logged in hotspot service and mikrotik will report it as online user. 
+

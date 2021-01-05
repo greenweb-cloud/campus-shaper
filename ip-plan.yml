@@ -1,0 +1,7 @@
+Dist_10:
+  name: 'Engineering'
+  summary_net: "172.1.8.0/19"
+  wireless_net: "172.2.14.0/28"
+  wireless_user: 0
+  wire_user: 0
+

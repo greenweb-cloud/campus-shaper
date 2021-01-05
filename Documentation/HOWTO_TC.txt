@@ -1,0 +1,19 @@
+sample and explanations of /sbin/tc commands
+==============================================
+
+1. Sample tc commands
+   $ tc -s -d qdisc show:
+     shows the packet and byte count per class.
+
+   $ tc -s qdisc ls dev $DEV
+   $ tc -s class ls dev $DEV
+
+2. Stop 
+   $ tc qdisc delete dev enp3s0f0 root   # delete qdisc
+   $ iptables -t mangle -F
+   
+20. Hysteresis and HTB
+URL: http://wiki.linuxwall.info/doku.php/en%3aressources%3adossiers%3anetworking%3atraffic_control#hysteresis_and_htb
+In most cases, this optimization is simply deactivated, as shown below:
+   # cat /sys/module/sch_htb/parameters/htb_hysteresis
+      0
