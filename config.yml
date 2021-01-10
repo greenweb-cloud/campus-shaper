@@ -1,0 +1,87 @@
+appName: fum-TC
+
+log:
+  level: WARN
+  dir: '/var/log/AAA/'
+  general: 'fum-BW-control.log'
+  statistics: 'qos-monitor.log'
+  
+databases:
+  pooya:
+    host: '172.1.1.2'
+    username: 'test'
+    password: 'dab@1daq0'
+    staff_prof_db: 'database'
+    stu_db: 'educd'
+
+mikrotik:
+  name: 'Core-HotSpot'
+  host: '172.1.2.3'
+  username: 'tc'
+  password: 'qidfdfw2#P)I'
+  port: 8728
+
+tc:
+  cmd: '/sbin/tc'
+  classify:
+    PROF:
+      classid: 10
+      prio: 1
+      mark: 2                       # PROF_MARK=2
+      total_bw: 50mbit
+      ceil: 100mbit
+      user_bw: 6                # mbit
+    PHD:
+      classid: 20
+      prio: 2
+      mark: 3                    # STU_MARK=3
+      total_bw: 100mbit
+      ceil: 150mbit
+      user_bw: 4                # mbit
+    MASTER:
+      classid: 30
+      prio: 2
+      mark: 3                    # STU_MARK=3
+      total_bw: 100mbit
+      ceil: 150mbit
+      user_bw: 4                # mbit
+    OTHER_STU:
+      classid: 40
+      prio: 2
+      mark: 3                    # STU_MARK=3
+      total_bw: 400mbit
+      ceil: 600mbit
+      user_bw: 4                # mbit
+    STAFF:
+      classid: 50
+      prio: 3
+      mark: 4                      # STAFF_MARK=4
+      total_bw: 50mbit
+      user_bw: 4                # mbit
+    DEFAULT:
+      classid: 60 
+      prio: 4
+      mark: 5                    # DEFAULT_MARK=5
+      total_bw: 10mbit
+      user_bw: 2                # mbit
+  dev:
+    rate: '1000mbit'
+    down: 'enp3s0f0'
+    up: 'enp3s0f1'
+
+iptables:
+  mark_path_file: '/dev/shm/fumShaper-counter.data'
+  mark_start: 0xa
+  mark_end: ffff
+ 
+users:
+  new_time: 60                  # new user is defined when uptime is less than `new_time`
+  current_users_path: '/dev/shm/fumShaper-currentIPs.data'
+  user_info_path: '/dev/shm/fumShaper-userInfo.data'
+  PHD_A_EduSecCode: 16           # PHD
+  PHD_B_EduSecCode: 17           # PHD
+  MASTER_EduSecCode: 33          # MASTER
+  STAFF_TYPE: "STAFF"
+  PROF_TYPE: "PROF"
+  OTHER_STU_TYPE: "OTHER_STU"
+  DEFAULT: "DEFAULT"

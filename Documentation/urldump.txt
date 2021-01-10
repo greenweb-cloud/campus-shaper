@@ -1,0 +1,23 @@
+Howto dump url of users?
+=========================
+
+first add the following configuration to the /etc/logrotate.conf:
+      /var/log/AAA/URLdump.log { 
+         daily 
+	 rotate 180      
+	 compress  
+	 create 0644 postfix postfix               
+      }
+
+      /var/log/AAA/fum-BW-control.log {
+        daily  
+	rotate 180    
+	compress      
+	create 0644 postfix postfix   
+      }
+
+then add the following command to the /etc/crontab file:
+     0 0 * * * root logrotate -f /etc/logrotate.conf  
+     0 0 * * * root kill -9 `pgrep httpry`
+     1 * * * * root pgrep httpry > /dev/null || httpry -i enp3s0f0 -o /var/log/AAA/URLdump.log     
+     

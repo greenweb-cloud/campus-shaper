@@ -1,0 +1,21 @@
+Howto create VETH device
+========================
+The VETH (virtual Ethernet) device is a local Ethernet tunnel.
+You can create virtual interfaces using the iproute2 toolkit:
+    $ ip link add veth0 type veth peer name veth1
+
+This will create 2 interfaces, veth0 and veth1. Think of them as 2 ends of a pipe.
+Any traffic sent into veth0 will come out veth1 and vice versa.
+If you want the traffic to be routed, you can do:
+
+   $ sysctl -w net.ipv4.conf.veth0.forwarding=1
+
+This will tell the kernel to forward traffic coming from veth0 (so use veth1 for the used endpoint).
+Another option is to set up a bridge with veth0 and another interface. Then any traffic coming through
+the virtual interface will get routed out to the network as if your machine were simply acting as a switch.
+
+To tear it down:
+   $ ip link del veth0
+   
+Ref: https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking/#veth
+========================	
